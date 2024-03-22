@@ -115,3 +115,31 @@ func (l *Logger) getLevelColor(level LogLevel) string {
 		return ColorReset
 	}
 }
+
+// Infof logs an info message with formatting.
+func (l *Logger) Infof(format string, args ...interface{}) {
+	l.logWithColorf(LogLevelInfo, format, args...)
+}
+
+// Warningf logs a warning message with formatting.
+func (l *Logger) Warningf(format string, args ...interface{}) {
+	l.logWithColorf(LogLevelWarning, format, args...)
+}
+
+// Errorf logs an error message with formatting.
+func (l *Logger) Errorf(format string, args ...interface{}) {
+	l.logWithColorf(LogLevelError, format, args...)
+}
+
+// Fatalf logs a fatal message with formatting and exits the application.
+func (l *Logger) Fatalf(format string, args ...interface{}) {
+	l.logWithColorf(LogLevelFatal, format, args...)
+	os.Exit(1)
+}
+
+func (l *Logger) logWithColorf(level LogLevel, format string, args ...interface{}) {
+	if l.level <= level {
+		message := fmt.Sprintf(format, args...)
+		l.logWithColor(level, message)
+	}
+}
