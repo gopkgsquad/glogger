@@ -18,8 +18,9 @@ package main
 import "github.com/gopkgsquad/glogger"
 
 func main() {
-    // initialize a new glogger
-    logger := logger.NewLogger(os.Stdout, logger.LogLevelInfo)
+    // initialize a new glogger, 3rd bool param is for weather you want
+    // see renderCallerInfo or not
+    logger := logger.NewLogger(os.Stdout, logger.LogLevelInfo, true)
 
     // log info
     logger.Info("FROM MYLOGGER INFO")
@@ -32,7 +33,7 @@ func main() {
 ```go
 func main() {
     // initialize a new glogger
-    logger := logger.NewLogger(os.Stdout, logger.LogLevelInfo)
+    logger := logger.NewLogger(os.Stdout, logger.LogLevelInfo, true)
 
     // log info
     logger.Info("FROM MYLOGGER INFO")

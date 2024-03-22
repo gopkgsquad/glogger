@@ -43,21 +43,29 @@ type Logger struct {
 	loggers          map[LogLevel]*log.Logger
 	timeColor        string
 	fileColor        string
-	renderCallerInfo bool
+	renderCallerInfo *bool
 }
 
 // NewLogger creates a new instance of the custom logger.
-func NewLogger(out io.Writer, level LogLevel, renderCallerInfo bool) *Logger {
+func NewLogger(out io.Writer, level LogLevel, renderCallerInfo ...bool) *Logger {
 	loggers := make(map[LogLevel]*log.Logger)
 	for _, lvl := range []LogLevel{LogLevelDebug, LogLevelInfo, LogLevelWarning, LogLevelError, LogLevelFatal} {
 		loggers[lvl] = log.New(out, "", 0)
 	}
+
+	var render bool
+	if len(renderCallerInfo) > 0 {
+		render = renderCallerInfo[0]
+	} else {
+		render = true
+	}
+
 	return &Logger{
 		level:            level,
 		loggers:          loggers,
 		timeColor:        ColorCyan,
 		fileColor:        ColorMagenta,
-		renderCallerInfo: renderCallerInfo,
+		renderCallerInfo: &render,
 	}
 }
 
@@ -92,7 +100,7 @@ func (l *Logger) logWithColor(level LogLevel, msg string) {
 		timestamp := fmt.Sprintf("%s[%s]%s ", l.timeColor, time.Now().Format("2006/01/02 15:04:05"), ColorReset)
 		levelColor := l.getLevelColor(level)
 		logMessage := timestamp + levelColor + msg + ColorReset
-		if l.renderCallerInfo {
+		if l.renderCallerInfo != nil && *l.renderCallerInfo {
 			caller := l.getCallerInfo()
 			callerInfo := fmt.Sprintf("%s[%s]%s ", l.fileColor, caller, ColorReset)
 			logMessage = callerInfo + logMessage
