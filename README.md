@@ -37,14 +37,14 @@ func main() {
     // log info
     logger.Info("FROM MYLOGGER INFO")
 
-    // log info
-    logger.Warning("FROM MYLOGGER INFO")
+    // log Warning
+    logger.Warning("FROM MYLOGGER WARNING")
 
-    // log info
-    logger.Error("FROM MYLOGGER INFO")
+    // log Error
+    logger.Error("FROM MYLOGGER ERROR")
 
-    // log info
-    logger.Fatal("FROM MYLOGGER INFO")
+    // log Fatal
+    logger.Fatal("FROM MYLOGGER FATAL")
 }
 
 ```
