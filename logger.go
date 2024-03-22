@@ -102,7 +102,7 @@ func (l *Logger) logWithColor(level LogLevel, msg string) {
 		logMessage := timestamp + levelColor + msg + ColorReset
 		if l.renderCallerInfo != nil && *l.renderCallerInfo {
 			caller := l.getCallerInfo()
-			callerInfo := fmt.Sprintf("%s[%s]%s ", l.fileColor, caller, ColorReset)
+			callerInfo := fmt.Sprintf("%s%s%s ", l.fileColor, caller, ColorReset)
 			logMessage = callerInfo + logMessage
 		}
 		l.loggers[level].Output(3, logMessage) // Adjusted depth to log the correct caller
@@ -153,7 +153,15 @@ func (l *Logger) Fatalf(format string, args ...interface{}) {
 
 func (l *Logger) logWithColorf(level LogLevel, format string, args ...interface{}) {
 	if l.level <= level {
+		timestamp := fmt.Sprintf("%s[%s]%s ", l.timeColor, time.Now().Format("2006/01/02 15:04:05"), ColorReset)
+		levelColor := l.getLevelColor(level)
 		message := fmt.Sprintf(format, args...)
-		l.logWithColor(level, message)
+		logMessage := timestamp + levelColor + message + ColorReset
+		if l.renderCallerInfo != nil && *l.renderCallerInfo {
+			caller := l.getCallerInfo()
+			callerInfo := fmt.Sprintf("%s%s%s ", l.fileColor, caller, ColorReset)
+			logMessage = callerInfo + logMessage
+		}
+		l.loggers[level].Output(3, logMessage) // Adjusted depth to log the correct caller
 	}
 }
